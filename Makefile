@@ -12,8 +12,9 @@ all: s21_decimal.a test gcov_report
 s21_decimal.a: $(O_FILES)
 	ar rc s21_decimal.a $(O_FILES) 
 
-test:
-	gcc $(CFLAGS) $(C_TEST_FILES) $(C_FILES) -o test $(CHECK_FLAGS)
+test: clean
+	gcc $(CFLAGS) $(C_TEST_FILES) $(C_FILES) -o test $(CHECK_FLAGS) -g
+	./test
 
 gcov_report:
 	rm -rf *.gcno *.gcda report info_report html_report

@@ -1,6 +1,9 @@
 #include "s21_decimal.h"
 
 int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
+    if (result == NULL)
+        return NUM_LARGE;
+
     int overflow = OK;
 
     normalize(&value_1, &value_2);
@@ -40,9 +43,37 @@ int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 }
 
 int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
-    man_mul(value_1, value_2, result);
+    if (result == NULL)
+        return NUM_LARGE;
+    
+    int overflow = OK;
+    int sign = get_sign(value_1) ^ get_sign(value_2);
 
-    return OK;
+    s21_decimal zero = {0};
+
+    if (s21_is_equal(value_1, zero) || s21_is_equal(value_2, zero)) {
+        inintial_decimal(result);
+        return overflow;
+    }
+
+    if (s21_is_less(value_2, value_1)) {
+        overflow = man_mul(value_1, value_2, result);
+        if (overflow && get_scale(value_1)) {
+            while (overflow) {
+                bank_round(&value_1, 1);
+                overflow = man_mul(value_1, value_2, result);
+            }
+        }
+    }
+
+    int scale = get_scale(value_1) + get_scale(value_2);
+    if (scale > 28 || (overflow && sign))
+        return NUM_SMALL;
+
+    set_scale(result, scale);
+    set_sign(result, sign);
+
+    return overflow;
 }
 
 int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {

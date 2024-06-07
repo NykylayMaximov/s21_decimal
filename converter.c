@@ -33,6 +33,9 @@ int count_str_float(float number, char *str) {
 }
 
 int s21_from_float_to_decimal(float src, s21_decimal *dst) {
+    if (dst == NULL)
+        return CONVERT_ERROR;
+
     inintial_decimal(dst);
     
     if (0 < fabsf(src) && fabsf(src) < 1e-28)
@@ -64,9 +67,9 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
 }
 
 int s21_from_decimal_to_int(s21_decimal src, int *dst) {
-    if (dst == NULL)
+    if (dst == NULL || src.bits[1] != 0 || src.bits[2] != 0)
         return CONVERT_ERROR;
-    
+        
     int scale = get_scale(src);
     int sign = (get_sign(src)) ? -1 : 1;
     s21_decimal ten;
@@ -85,6 +88,9 @@ int s21_from_decimal_to_int(s21_decimal src, int *dst) {
 }
 
 int s21_from_decimal_to_float(s21_decimal src, float *dst) {
+    if (dst == NULL)
+        return CONVERT_ERROR;
+
     int sign = get_sign(src);
     int scale = get_scale(src);
 

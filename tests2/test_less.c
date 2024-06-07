@@ -42,7 +42,7 @@ END_TEST
 START_TEST(exp_less) {
 s21_decimal a = {{0, 12345, 6789, 101113}}, b = {{0, 12345, 6789, 101112}};
 set_scale(&a, 0);
-set_scale(&b, 5);
+set_scale(&b, 28);
 
 ck_assert_int_eq(s21_is_less(a, b), 0);
 }

@@ -80,13 +80,12 @@ void bank_round(s21_decimal *value, int count) {
 
         if (rem.bits[0] > 5)
             man_add(*value, one, value);
-        else if (rem.bits[0] == 5)
+        else if (rem.bits[0] == 5) {
             rem_2 = man_div(*value, two, NULL);
-        
-        if (man_is_equal(one, rem_2))
-            man_add(*value, one, value);
-
-        count++;
+            if (man_is_equal(one, rem_2))
+                man_add(*value, one, value);
+        }
+        count--;
     }
     value->bits[3] = byte;
     set_scale(value, scale);

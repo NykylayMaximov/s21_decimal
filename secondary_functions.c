@@ -1,21 +1,15 @@
 #include "s21_decimal.h"
 
 int get_sign(s21_decimal value) {
-    int sign;
-    if ((value.bits[3] & (1 << 31)) == 0) {
-        sign = 0;
-    } else {
-        sign = 1;
-    }
-    return sign;
+    return ((value.bits[3] & (1 << 31)) == 0) ? 0 : 1;
 }
 
 void set_sign(s21_decimal *value, int sign) {
-    if (sign == 0) {
+    s21_decimal zero = {0};
+    if (sign == 0 || man_is_equal(*value, zero))
         value->bits[3] = value->bits[3] & ~(1 << 31);
-    } else {
+    else
         value->bits[3] = value->bits[3] | (1 << 31);
-    }
 }
 
 int get_scale(s21_decimal value) {
@@ -34,32 +28,24 @@ void set_scale(s21_decimal *value, int scale) {
     int shift = 16;
 
     while (shift <= 23) {
-        if (scale > 0 && scale % 2 == 1) {
+        if (scale > 0 && scale % 2 == 1)
             value->bits[3] = value->bits[3] | (1 << shift);
-        } else {
+        else
             value->bits[3] = value->bits[3] & ~(1 << shift);
-        }
         scale /= 2;
         shift++;
     }
 }
 
 int get_bit(s21_decimal value, int position) {
-    int sign;
-    if ((value.bits[position / 32] & (1 << position % 32)) == 0) {
-        sign = 0;
-    } else {
-        sign = 1;
-    }
-    return sign;
+    return ((value.bits[position / 32] & (1 << position % 32)) == 0) ? 0 : 1;
 }
 
 void set_bit(s21_decimal *value, int position, int bit) {
-    if (bit == 0) {
+    if (bit == 0)
         value->bits[position / 32] = value->bits[position / 32] & ~(1 << position % 32);
-    } else {
+    else
         value->bits[position / 32] = value->bits[position / 32] | (1 << position % 32);
-    }
 }
 
 void inintial_decimal(s21_decimal *value) {

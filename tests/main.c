@@ -1,44 +1,39 @@
 #include "s21_decimal_test.h"
 
-int main(void) {
-    // Set seed for random
-    srand(time(NULL));
+int main() {
+  int number_failed = 0;
 
-    // Run tests for func
-    run_tests();
+  Suite *test[] = {suite_add_test(),
+                   suite_sub_test(),
+                   suite_mul_test(),
+                   suite_div_test(),
 
-    return 0;
-}
+                   suite_less_test(),
+                   suite_less_or_equal_test(),
+                   suite_greater_test(),
+                   suite_greater_or_equal_test(),
+                   suite_equal_test(),
+                   suite_not_equal_test(),
 
-void run_testcase(Suite *testcase) {
-    static int counter_testcase = 0;
+                   suite_int_to_dec_test(),
+                   suite_float_to_dec_test(),
+                   suite_dec_to_int_test(),
+                   suite_dec_to_float_test(),
 
-    if (counter_testcase)
-        putchar('\n');
-    printf("CURRENT TEST: %d\n", ++counter_testcase);
+                   suite_floor_test(),
+                   suite_round_test(),
+                   suite_truncate_test(),
+                   suite_negate_test(),
+                   NULL};
 
-    SRunner *sr = srunner_create(testcase);
-    srunner_set_fork_status(sr, CK_NOFORK);
-    srunner_run_all(sr, CK_NORMAL);
+  for (int i = 0; test[i] != NULL; i++) {
+    printf("\n\n");
+    SRunner *sr = srunner_create(test[i]);
 
+    srunner_run_all(sr, CK_VERBOSE);
+
+    number_failed += srunner_ntests_failed(sr);
     srunner_free(sr);
-}
-void run_tests(void) {
-    Suite *list_cases[] = {
-        suite_s21_equal(),
-        suite_s21_less(),
-        suite_s21_other_condion(),
-        suite_s21_add(),
-        suite_floor(),
-        suite_s21_sub(),
-        suite_s21_dec_to_int(),
-        suite_round(),
-        suite_negate(),
-        suite_dec_to_float(),
-        NULL,
-    };
-
-    for (Suite **current_testcase = list_cases; *current_testcase; current_testcase++) {
-        run_testcase(*current_testcase);
-    }
+  }
+  return (number_failed == 0) ? 0 : 1;
 }
