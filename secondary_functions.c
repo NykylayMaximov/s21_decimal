@@ -107,3 +107,31 @@ void normalize(s21_decimal *value_1, s21_decimal *value_2) {
     set_scale(min_value, min_scale);
     set_scale(max_value, min_scale);
 }
+
+void print_decimal_bin(s21_decimal value) {
+    printf(" ");
+    for (int i = 95; i >= 0; i--) {
+        printf("%d", get_bit(value, i));
+        if (i == 88 || i == 80 || i ==72 || i == 56 || i == 48 || i == 40 || i == 24 || i == 16 || i == 8)
+            printf(".");
+        if (i == 64 || i == 32)
+            printf("|");
+    }
+    printf("  sign and scale - ");
+    for (int k = 127; k >= 96; k--) {
+        printf ("%d", get_bit(value, k));
+        if (k == 120 || k == 112 || k == 104)
+            printf(".");
+    } 
+    printf("\n");
+
+/*/
+    for (int i = 2; i >= 0; i--) {
+        printf("bits[%d] = %d", i, value.bits[i]);
+        if (i == 2 || i == 1)
+            printf("            |           ");
+    }
+
+    printf("            bits[3] = %d\n", value.bits[3]);
+/*/
+}

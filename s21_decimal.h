@@ -65,5 +65,6 @@ int man_is_equal(s21_decimal value_1, s21_decimal value_2);
 int man_is_not_equal(s21_decimal value_1, s21_decimal value_2);
 void bank_round(s21_decimal *value, int count);
 void normalize(s21_decimal *value_1, s21_decimal *value_2);
+void print_decimal_bin(s21_decimal value);
 
 #endif

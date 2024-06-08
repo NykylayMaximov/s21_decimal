@@ -5,6 +5,9 @@ ALL_FLAGS = $(CFLAGS) $(GCOV_FLAGS) $(CHECK_FLAGS)
 C_FILES = $(wildcard *.c ./simple_function/*.c)
 O_FILES = $(C_FILES:.c=.o)
 C_TEST_FILES = $(wildcard ./tests/*.c)
+C_TEST2_FILES = $(wildcard ./tests2/*.c)
+C_TEST3_FILES = $(wildcard ./tests3/*.c)
+C_TEST5_FILES = $(wildcard ./tests5/*.c)
 
 
 all: s21_decimal.a test gcov_report
@@ -26,3 +29,19 @@ gcov_report:
 
 clean:
 	rm -rf $(O_FILES) *.a *.o test *.gcno *.gcda report info_report html_report
+
+mytest: clean
+	gcc $(CFLAGS) mytest/mytest.c $(C_FILES) -o test $(CHECK_FLAGS) -g
+	./test
+
+test2: clean
+	gcc $(CFLAGS) $(C_TEST2_FILES) $(C_FILES) -o test $(CHECK_FLAGS) -g
+	./test
+
+test3: clean
+	gcc $(CFLAGS) $(C_TEST3_FILES) $(C_FILES) -o test $(CHECK_FLAGS) -g
+	./test
+
+test5: clean
+	gcc $(CFLAGS) $(C_TEST5_FILES) $(C_FILES) -o test $(CHECK_FLAGS) -g
+	./test
