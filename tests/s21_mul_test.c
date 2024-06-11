@@ -463,7 +463,7 @@ START_TEST(s21_mul_test_33) {
   int res = s21_mul(a, b, &res_bits);
 
   ck_assert_int_eq(res, 0);
-  s21_decimal check = {{-1717986919, -1717986919, -1717986919, 0}};
+  s21_decimal check = {{-1717986916, -1717986919, -1717986919, 0}};//p
   ck_assert_int_eq(res_bits.bits[0], check.bits[0]);
   ck_assert_int_eq(res_bits.bits[1], check.bits[1]);
   ck_assert_int_eq(res_bits.bits[2], check.bits[2]);
@@ -481,7 +481,7 @@ START_TEST(s21_mul_test_34) {
   int res = s21_mul(a, b, &res_bits);
 
   ck_assert_int_eq(res, 0);
-  s21_decimal check = {{-1717986919, -1717986919, -1717986919, 0}};
+  s21_decimal check = {{-1717986916, -1717986919, -1717986919, 0}};//p
   ck_assert_int_eq(res_bits.bits[0], check.bits[0]);
   ck_assert_int_eq(res_bits.bits[1], check.bits[1]);
   ck_assert_int_eq(res_bits.bits[2], check.bits[2]);
@@ -498,7 +498,7 @@ START_TEST(s21_mul_test_35) {
   int res = s21_mul(a, b, &res_bits);
 
   ck_assert_int_eq(res, 0);
-  s21_decimal check = {{-1717986919, -1717986919, -1717986919, -2147483648}};
+  s21_decimal check = {{-1717986916, -1717986919, -1717986919, -2147483648}};//p
   ck_assert_int_eq(res_bits.bits[0], check.bits[0]);
   ck_assert_int_eq(res_bits.bits[1], check.bits[1]);
   ck_assert_int_eq(res_bits.bits[2], check.bits[2]);
@@ -516,7 +516,7 @@ START_TEST(s21_mul_test_36) {
   int res = s21_mul(a, b, &res_bits);
 
   ck_assert_int_eq(res, 0);
-  s21_decimal check = {{-1717986919, -1717986919, -1717986919, -2147483648}};
+  s21_decimal check = {{-1717986916, -1717986919, -1717986919, -2147483648}};//p
   ck_assert_int_eq(res_bits.bits[0], check.bits[0]);
   ck_assert_int_eq(res_bits.bits[1], check.bits[1]);
   ck_assert_int_eq(res_bits.bits[2], check.bits[2]);

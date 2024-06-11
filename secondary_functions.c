@@ -89,8 +89,9 @@ void normalize(s21_decimal *value_1, s21_decimal *value_2) {
     s21_decimal *min_value = (scale_1 < scale_2) ? value_1 : value_2;
     s21_decimal *max_value = (scale_1 > scale_2) ? value_1 : value_2;
     
-    s21_decimal ten;
+    s21_decimal ten, one;
     s21_from_int_to_decimal(10, &ten);
+    s21_from_int_to_decimal(1, &one);
 
     while (min_scale != max_scale) {
         if (min_scale < 28 && !man_mul(*min_value, ten, min_value)) {

@@ -3,7 +3,12 @@
 int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     if (result == NULL)
         return NUM_LARGE;
-        
+    
+    int scale_1 = get_scale(value_1);
+    int scale_2 = get_scale(value_2);
+
+    if (scale_1 > 28 || scale_1 < 0 || scale_2 > 28 || scale_2 < 0)
+        return NUM_LARGE;
 
     int overflow = OK;
 
@@ -46,6 +51,12 @@ int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     if (result == NULL)
         return NUM_LARGE;
+
+    int scale_1 = get_scale(value_1);
+    int scale_2 = get_scale(value_2);
+
+    if (scale_1 > 28 || scale_1 < 0 || scale_2 > 28 || scale_2 < 0)
+        return NUM_LARGE;
     
     int overflow = OK;
     int sign = get_sign(value_1) ^ get_sign(value_2);
@@ -65,20 +76,15 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 
     while (overflow && scale > 0) {
         if (man_is_less_or_equal(value_2, value_1)) {
-            s21_decimal rem = man_div(value_1, ten, &value_1);
+            bank_round(&value_1, 1);
             scale--;
-            if (rem.bits[0] >= 5)
-                man_add(value_1, one, &value_1);
         } else {
-            s21_decimal rem =  man_div(value_2, ten, &value_2);
+            bank_round(&value_2, 1);
             scale--;
-            if (rem.bits[0] >= 5)
-                man_add(value_2, one, &value_2);
         }
 
         overflow = man_mul(value_1, value_2, result);
     }
-
 
     if (scale > 28 || (overflow && sign))
         return NUM_SMALL;
@@ -90,10 +96,24 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 }
 
 int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
+    if (result == NULL)
+        return NUM_LARGE;
+
+    int scale_1 = get_scale(value_1);
+    int scale_2 = get_scale(value_2);
+
+    if (scale_1 > 28 || scale_1 < 0 || scale_2 > 28 || scale_2 < 0)
+        return NUM_LARGE;
+
     s21_decimal zero = {0};
 
     if (s21_is_equal(value_2, zero))
         return DIV_ZERO;
+
+    if (s21_is_equal(value_1, zero)) {
+        inintial_decimal(result);
+        return OK;
+    }
     
     man_div(value_1, value_2,result);
 
