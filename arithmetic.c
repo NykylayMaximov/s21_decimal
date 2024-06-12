@@ -115,7 +115,34 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
         return OK;
     }
     
-    man_div(value_1, value_2,result);
+    s21_decimal remainder = man_div(value_1, value_2, result);
+
+    int scale = scale_1 - scale_2;
+    int overflow = OK;
+    s21_decimal ten;
+    s21_from_int_to_decimal(10, &ten);
+
+    while (scale < 0) {
+        overflow = man_mul(*result, ten, result);
+        scale++;
+        if (overflow) {
+            inintial_decimal(result);
+            return NUM_LARGE;
+        }
+    }
+
+
+    while (scale < 28 && !overflow && remainder.bits[0] != 0) {
+        s21_decimal temp;
+        man_mul(remainder, ten, &remainder);
+        remainder = man_div(remainder, value_2, &temp);
+        overflow = man_mul(*result, ten, result);
+        man_add(*result, temp, result);
+        if (!overflow)
+            scale++;
+    }
+
+    set_scale(result, scale);
 
     return OK;
 }

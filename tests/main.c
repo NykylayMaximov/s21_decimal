@@ -1,14 +1,14 @@
 #include "s21_decimal_test.h"
 
-int main() {
+int main(void) {
   int number_failed = 0;
 
-  Suite *test[] = {/*/suite_add_test(),
+  Suite *test[] = {suite_add_test(),
                    suite_sub_test(),
-                   suite_mul_test(),/*/
+                   suite_mul_test(),
                    suite_div_test(),
 
-                   /*/suite_less_test(),
+                   suite_less_test(),
                    suite_less_or_equal_test(),
                    suite_greater_test(),
                    suite_greater_or_equal_test(),
@@ -23,7 +23,7 @@ int main() {
                    suite_floor_test(),
                    suite_round_test(),
                    suite_truncate_test(),
-                   suite_negate_test(),/*/
+                   suite_negate_test(),
                    NULL};
 
   for (int i = 0; test[i] != NULL; i++) {

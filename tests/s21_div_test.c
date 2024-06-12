@@ -291,6 +291,8 @@ END_TEST
 Suite *suite_div_test(void) {
   Suite *s = suite_create("\033[42m div test\033[m");
   TCase *tc = tcase_create("div test");
+  
+  suite_add_tcase(s, tc);
 
   tcase_add_test(tc, s21_div_1);
   tcase_add_test(tc, s21_div_2);
@@ -310,8 +312,6 @@ Suite *suite_div_test(void) {
   tcase_add_test(tc, s21_div_17);
   tcase_add_test(tc, s21_div_18);
   tcase_add_test(tc, s21_div_19);
-
-  suite_add_tcase(s, tc);
 
   return s;
 }
