@@ -19,6 +19,7 @@ int main() {
     return 0;
 }/*/
 
+/*/
 int main() {
   s21_decimal src1 = {0}, src2 = {0}, result = {0};
   int value_type_result = 0;
@@ -45,4 +46,15 @@ int main() {
     printf("scale 1 - %d    scale 2 - %d    scale res - %d\n", get_scale(src1), get_scale(src2), get_scale(result));
 
     return 0;
+}/*/
+
+int main() {
+  float a = -23748280, b = 0;
+  s21_decimal number = {0};
+  s21_from_float_to_decimal(a, &number);
+  s21_from_decimal_to_float(number, &b);
+  print_decimal_bin(number);
+  printf("%f  %f\n", a, b);
+  printf("%e  %e\n", a, b);
+  return 0;
 }

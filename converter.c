@@ -8,11 +8,28 @@ int s21_from_int_to_decimal(int src, s21_decimal *dst) {
     return OK;
 }
 
-int count_str_float(float number, char *str) {
+int count_str_float(float number, char *str, int *exp) {
     int count = 0, k = 1;
     char buffer[100];
+    char buffer2[100];
 
-    snprintf(buffer, sizeof(buffer), "%f", number);
+    snprintf(buffer2, sizeof(buffer2), "%e", number);
+
+    char *ptr = buffer2;
+    int index = 0;
+    while (*ptr != '\0') {
+        if (*ptr == 'e') {
+            ptr++;
+            *exp = strtol(ptr, NULL, 10);
+            break;
+        }
+        ptr++;
+        index++;
+    }
+
+    strncpy(buffer, buffer2, index);
+    buffer[index] = '\0';
+
 
     for (int i = strlen(buffer) - 1; i >= 0; i--) {
         if (buffer[i] == '0' && k == 1) {
@@ -42,7 +59,8 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
         return CONVERT_ERROR;
 
     char buffer[100];
-    int count_str = count_str_float(src, buffer);
+    int exp = 0;
+    int count_str = count_str_float(src, buffer, &exp);
     int overflow = 0;
 
     s21_decimal ten;
@@ -59,11 +77,17 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
 
     if (!overflow)
         man_div(*dst, ten, dst);
+    
+    int scale = count_str - exp;
+    while (scale < 0) {
+        overflow = man_mul(*dst, ten, dst);
+        scale++;
+    }
 
     set_sign(dst, src < 0);
-    set_scale(dst, count_str);
+    set_scale(dst, scale);
 
-    return OK;
+    return overflow;
 }
 
 int s21_from_decimal_to_int(s21_decimal src, int *dst) {
