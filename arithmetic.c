@@ -131,7 +131,6 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
         }
     }
 
-
     while (scale < 28 && !overflow && remainder.bits[0] != 0) {
         s21_decimal temp;
         man_mul(remainder, ten, &remainder);
@@ -141,6 +140,10 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
         if (!overflow)
             scale++;
     }
+
+    if (scale > 28) {
+        return NUM_SMALL;
+    }    
 
     set_scale(result, scale);
 

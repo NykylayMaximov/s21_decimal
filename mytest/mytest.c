@@ -2,25 +2,22 @@
 
 
 int main() {
-  // 26409387504754779197847983445
-  s21_decimal a = {{0x55555555, 0x55555555, 0x55555555, 0x0}};
-  // 0.5000000000000000000000000001
-  s21_decimal b = {{0x88000001, 0x1F128130, 0x1027E72F, 0x1C0000}};
-  // 13204693752377389598923991725
-  s21_decimal check = {{0xAAAAAAAD, 0xAAAAAAAA, 0x2AAAAAAA, 0x0}};
+  s21_decimal a = {{-1, 0, 0, 0x1C8000}};
+  s21_decimal b = {{0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x140000}};
+
 
   s21_decimal result;
-  int code = s21_mul(a, b, &result);
-  double num;
+  int code = s21_div(a, b, &result);
+
+  float num;
   
   s21_from_decimal_to_float(result, &num);
 
     print_decimal_bin(a);
     print_decimal_bin(b);
     print_decimal_bin(result);
-    print_decimal_bin(check);
-    printf("%lf\n", num);
-    printf("13204693752377389598923991725\n");
+    //print_decimal_bin(check);
+    printf("%e\n", num);
     printf("ERROR - %d\n", code);
     printf("scale 1 - %d    scale 2 - %d    scale res - %d\n", get_scale(a), get_scale(b), get_scale(result));
 
