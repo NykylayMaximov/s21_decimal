@@ -1,6 +1,9 @@
 #include "s21_decimal.h"
 
 int s21_truncate(s21_decimal value, s21_decimal *result) {
+    if (result == NULL)
+        return CALCULATION_ERROR;
+
     int sign = get_sign(value);
     int scale = get_scale(value);
 
@@ -20,6 +23,9 @@ int s21_truncate(s21_decimal value, s21_decimal *result) {
 }
 
 int s21_floor(s21_decimal value, s21_decimal *result) {
+    if (result == NULL)
+        return CALCULATION_ERROR;
+
     int sign = get_sign(value);
 
     s21_decimal one;
@@ -36,6 +42,9 @@ int s21_floor(s21_decimal value, s21_decimal *result) {
 }
 
 int s21_round(s21_decimal value, s21_decimal *result) {
+    if (result == NULL)
+        return CALCULATION_ERROR;
+        
     int sign = get_sign(value);
     int scale = get_scale(value);
     s21_decimal ten, one, rem = {0};
@@ -63,6 +72,9 @@ int s21_round(s21_decimal value, s21_decimal *result) {
 }
 
 int s21_negate(s21_decimal value, s21_decimal *result) {
+    if (result == NULL)
+        return CALCULATION_ERROR;
+
     *result = value;
     set_sign(result, !get_sign(value));
     return OK;

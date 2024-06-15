@@ -2,9 +2,14 @@
 #include <string.h>
 
 int s21_from_int_to_decimal(int src, s21_decimal *dst) {
-    inintial_decimal(dst);
-    dst->bits[0] = (src >= 0) ? src : -src;
-    set_sign(dst, src < 0);
+    if (dst == NULL)
+        return CONVERT_ERROR;    
+
+    inintial_decimal(dst);    
+    int sign = (src < 0) ? 1 : 0;    
+    dst->bits[0] = abs(src);
+    set_sign(dst, sign);
+
     return OK;
 }
 
@@ -91,7 +96,7 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
 }
 
 int s21_from_decimal_to_int(s21_decimal src, int *dst) {
-    if (dst == NULL || src.bits[1] != 0 || src.bits[2] != 0)
+    if (dst == NULL || get_scale(src) > 28 || get_scale(src) < 0)
         return CONVERT_ERROR;
         
     int scale = get_scale(src);
@@ -104,6 +109,9 @@ int s21_from_decimal_to_int(s21_decimal src, int *dst) {
         scale--;
     }
 
+    if (src.bits[1] != 0 || src.bits[2] != 0)
+        return CONVERT_ERROR;
+
     set_bit(&src, 31, 0);
     *dst = src.bits[0];
     *dst *= sign;
@@ -112,7 +120,7 @@ int s21_from_decimal_to_int(s21_decimal src, int *dst) {
 }
 
 int s21_from_decimal_to_float(s21_decimal src, float *dst) {
-    if (dst == NULL)
+    if (dst == NULL || get_scale(src) > 28 || get_scale(src) < 0)
         return CONVERT_ERROR;
 
     int sign = get_sign(src);

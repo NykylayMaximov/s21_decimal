@@ -2,9 +2,14 @@
 
 
 int main() {
-  s21_decimal a = {{-1, 0, 0, 0x1C8000}};
-  s21_decimal b = {{0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x140000}};
+  // 0.0000000000000000000000000001
+  s21_decimal a = {{0x1, 0x0, 0x0, 0x1C0000}};
+  // -79228162514264337593543950335
+  s21_decimal b = {{0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x80000000}};
+  // -0
+  s21_decimal check = {{0x0, 0x0, 0x0, 0x80000000}};
 
+  //s21_decimal max = {{-1, -1, 429496729, 0}};
 
   s21_decimal result;
   int code = s21_div(a, b, &result);
@@ -16,13 +21,17 @@ int main() {
     print_decimal_bin(a);
     print_decimal_bin(b);
     print_decimal_bin(result);
-    //print_decimal_bin(check);
+    print_decimal_bin(check);
+    //print_decimal_bin(max);
     printf("%e\n", num);
     printf("ERROR - %d\n", code);
     printf("scale 1 - %d    scale 2 - %d    scale res - %d\n", get_scale(a), get_scale(b), get_scale(result));
 
     return 0;
 }
+
+//429496729
+//19999999
 
 /*/
 int main() {

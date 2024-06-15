@@ -83,12 +83,12 @@ START_TEST(s21_sub_10) {
   set_sign(&value_1, 1);
   s21_decimal value_2 = {{2, 0, 0, 0}};
   s21_decimal result;
-  s21_decimal check = {{1, 0, 0, 0}};
+  s21_decimal check = {{0, 0, 0, 0}};
   int return_value = s21_sub(value_1, value_2, &result);
   ck_assert_int_eq(result.bits[0], check.bits[0]);
   ck_assert_int_eq(result.bits[1], check.bits[1]);
   ck_assert_int_eq(result.bits[2], check.bits[2]);
-  //ck_assert_int_eq(result.bits[3], check.bits[3]);
+  ck_assert_int_eq(result.bits[3], check.bits[3]);
   ck_assert_int_eq(return_value, NINF);
 }
 END_TEST

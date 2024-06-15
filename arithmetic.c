@@ -20,8 +20,10 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     if (!(sign_1 ^ sign_2)) {
         overflow = man_add(value_1, value_2, result);
         set_sign(result, sign_1);
-        if (overflow && sign_1 && sign_2)
+        if (overflow && sign_1 && sign_2) {
+            inintial_decimal(result);
             overflow = NUM_SMALL;
+        }
     } else if (man_is_less_or_equal(value_1, value_2)) {
         man_sub(value_2, value_1, result);
         set_sign(result, sign_2);
@@ -115,37 +117,52 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
         return OK;
     }
     
-    s21_decimal remainder = man_div(value_1, value_2, result);
+    s21_decimal remainder = {0};
+
+    if (man_is_equal(value_1, value_2)) {
+        s21_from_int_to_decimal(1, result);
+    } else
+        remainder = man_div(value_1, value_2, result);
 
     int scale = scale_1 - scale_2;
+    int sign = get_sign(value_1) ^ get_sign(value_2);
     int overflow = OK;
     s21_decimal ten;
     s21_from_int_to_decimal(10, &ten);
 
-    while (scale < 0) {
-        overflow = man_mul(*result, ten, result);
-        scale++;
-        if (overflow) {
-            inintial_decimal(result);
-            return NUM_LARGE;
-        }
-    }
-
     while (scale < 28 && !overflow && remainder.bits[0] != 0) {
         s21_decimal temp;
-        man_mul(remainder, ten, &remainder);
+        int overflow_2 = man_mul(remainder, ten, &remainder);
+        if (overflow_2) {
+            man_div(value_2, ten, &value_2);
+        }
         remainder = man_div(remainder, value_2, &temp);
         overflow = man_mul(*result, ten, result);
         man_add(*result, temp, result);
         if (!overflow)
             scale++;
+        if (scale == 28 && s21_is_equal(*result, zero)) {
+            return NUM_SMALL;
+        }
     }
 
-    if (scale > 28) {
-        return NUM_SMALL;
-    }    
+    while (scale < 0) {
+        overflow = man_mul(*result, ten, result);
+        scale++;
+        if (overflow && !sign) {
+            inintial_decimal(result);
+            return NUM_LARGE;
+        } else if (overflow && sign) {
+            inintial_decimal(result);
+            return NUM_SMALL;           
+        }
+    }
 
+    if (scale >= 28 && man_is_equal(*result, zero))
+        return NUM_SMALL;
+        
     set_scale(result, scale);
+    set_sign(result, sign);
 
     return OK;
 }
